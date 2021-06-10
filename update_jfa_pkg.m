@@ -18,16 +18,16 @@ pkg -nodeps -verbose uninstall 'jfa-wavelet'
 
 if (what > 0)
     % install all
-    pkg install 'jfa-conversion.tar.gz'
-    pkg install 'jfa-eos80.tar.gz'
-    pkg install 'jfa-geometry.tar.gz'
-    pkg install 'jfa-image.tar.gz'
-    pkg install 'jfa-irig.tar.gz'
-    pkg install 'jfa-signal.tar.gz'
-    pkg install 'jfa-simulation.tar.gz'
-    pkg install 'jfa-statistics.tar.gz'
     pkg install 'jfa-utilities.tar.gz'
+    pkg install 'jfa-conversion.tar.gz'
+    pkg install 'jfa-geometry.tar.gz'
+    pkg install 'jfa-statistics.tar.gz'
+    pkg install 'jfa-signal.tar.gz'
     pkg install 'jfa-wavelet.tar.gz'
+    pkg install 'jfa-irig.tar.gz'
+    pkg install 'jfa-image.tar.gz'
+    pkg install 'jfa-eos80.tar.gz'
+    pkg install 'jfa-simulation.tar.gz'
 end
 
 if (what > 1)

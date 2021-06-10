@@ -1,4 +1,4 @@
-function s = rawread (raw_file_name, chan, precision)
+function s = binread (raw_file_name, chan, precision)
 
 if nargin < 3
    precision = 'int32';
