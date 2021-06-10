@@ -1,0 +1,11 @@
+Name:        jfa-utilities
+Version:     0.0.1
+Date:        2021-6-10
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA Utilities ToolBox
+Description: Many useful functions done by JFA, for JFA
+Categories:  General
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+License:     Copyright JFA

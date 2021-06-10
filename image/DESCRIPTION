@@ -1,0 +1,12 @@
+Name:        jfa-image
+Version:     0.0.1
+Date:        2021-6-10
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA Image ToolBox
+Description: images processing toolbox
+Categories:  Image
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+Depends:     jfa-signal
+License:     Copyright JFA

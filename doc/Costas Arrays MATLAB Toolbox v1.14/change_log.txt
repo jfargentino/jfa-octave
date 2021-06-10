@@ -1,0 +1,80 @@
+Costas arrays MATLAB toolbox - version 1.14
+
+  * Added 28 to the database
+  * Added 29 to the database
+
+ -- ken	04/02/11
+
+Costas arrays MATLAB toolbox - version 1.13
+  
+  * Combined cadd functions into one function
+  * Combined crem functions into one function
+  * Combined dflip and & drot functions into one function
+  * Updated all other functions which call these new functions
+  * Fixed plotcostas so it now plots empty arrays
+  * Renamed shannon arrays to drt arrays
+  
+ -- ken	17/07/09
+
+Costas arrays MATLAB toolbox - version 1.12
+  
+  * Fixed bug in dflipadiag
+  * Fixed typo in correllationsurface
+  
+ -- ken	23/01/09
+
+Costas arrays MATLAB toolbox - version 1.11
+  
+  * Added 4 functions to generate Beard spins
+  * Changed input arguments for Golomb, Lempel & Taylor functions
+  * Renamed Welch functions and added an extra one
+  * Fixed bug in cremul
+  * Fixed Contents file to show all functions
+  
+ -- ken	04/11/08
+
+Costas arrays MATLAB toolbox - version 1.1
+
+  * Major naming convention change to all functions
+  * Added costas function
+  * Split rotation function up
+  * Split flip function up
+  * Split corner dot adding function up
+  * Split corner dot removing function up
+  * added caddall function
+  * added rickard function
+  * added shannon function
+
+ -- ken	16/09/08
+
+Costas arrays MATLAB toolbox - version 1.03
+
+  * Updated the database
+  * Added testing feature
+  * Fixed bug in gen_T4
+  * Fixed bug in gen_W0
+  * Altered op_CornerRem output for no arrays with a corner dot
+  * Minor change to a couple functions when output is empty
+
+ -- ken	17/06/08
+
+Costas arrays MATLAB toolbox - version 1.02
+
+  * fixed a bug in cl_IsCostas caused by the v1.01 changes
+  * Communications toolbox is no longer required for cl_IsCostas to run
+
+ -- ken	29/05/08
+
+Costas arrays MATLAB toolbox - version 1.01
+
+  * Added database of arrays 1-27
+  * Fixed bug in gen_G2
+  * Altered cl_IsCostas for increased speed
+
+ -- ken	22/05/08
+
+Costas arrays MATLAB toolbox - version 1.00
+
+  * Initial release
+
+ -- ken	18/04/08

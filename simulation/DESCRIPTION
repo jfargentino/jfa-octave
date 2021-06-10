@@ -1,0 +1,12 @@
+Name:        jfa-simulation
+Version:     0.0.1
+Date:        2021-6-10
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA Simulation ToolBox
+Description: Scripts to help underwater acoustic simulation
+Categories:  General
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+Depends:     jfa-signal, jfa-conversion
+License:     Copyright JFA

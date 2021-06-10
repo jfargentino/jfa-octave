@@ -1,0 +1,415 @@
+
+ File GrayCode.txt          W. Kahan          version dated  3 Mar. 2009
+      ~~~~~~~~~~~~                      supersedes 13 July 2007  version
+
+ This ASCII text-file documents package  GrayPack  of  MATLAB  functions
+    grays.m       gray2int.m    int2gray.m    btr2int.m    graynext.m
+    grayndcs.m    gray2btr.m    btr2gray.m    int2btr.m    graystep.m
+ programmed to manipulate the  Gray Cyclic Binary Codes.  Included  also
+ are conversions between their codewords' two  MATLAB  representations.
+
+
+
+ What are the  Gray Cyclic Binary Codes?
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ For any integer  n > 0  these can be construed as a sequence of  2^n
+ distinct  n-bit  integers  g  each of which differs from its precursor
+ in just one bit-position.  Column  G = grays(n)  exhibits all  2^n  of
+ these integers  g  at once;  2^n  invocations   g = graynext(d, g, n)
+ step through all  2^n  consecutive codewords in the forward direction
+ if  d > 0  or else backward;  but these integers  g  need  0 < n < 54 .
+
+ Gray Codes  can be construed also as a sequence of  2^n  distinct  Bit-
+ Rows   B = [b1, b2, ..., bn]   in which each  bj  is either  0  or  1 .
+ Now  2^n  invocations of   B = graystep(d, B)   step through all  2^n
+ codewords in turn in the forward direction if  d > 0  or else backward.
+
+ Henceforth we abbreviate  "codeword" to "code"  unless it is confusing.
+
+ Conversion between a bit-row  B = (B(:)' ~= 0)  and an integer  g >= 0
+ representing the same  Gray  code in  GrayPack  enforces the relation
+  B = [b1, b2, ..., bn]  <-->  g = b1 + b2*2 + b3*4 + ... + bn*2^(n-1) .
+
+ At  n = 4  all  2^n  Gray Codes  G = grays(n)  and bit-rows  B  are ...
+
+
+            Index   Gray Code         Bit-row  B      Change-Index
+              k     g = G(1+k)    b1   b2   b3   b4    m = M(1+k)
+             ---    ----------   ---  ---  ---  ---   ------------
+              0         0         0    0    0    0        +1
+              1         1         1    0    0    0        +2
+              2         3         1    1    0    0        -1
+              3         2         0    1    0    0        +3
+              4         6         0    1    1    0        +1
+              5         7         1    1    1    0        -2
+              6         5         1    0    1    0        -1
+              7         4         0    0    1    0        +4
+
+              8        12         0    0    1    1        +1
+              9        13         1    0    1    1        +2
+             10        15         1    1    1    1        -1
+             11        14         0    1    1    1        -3
+             12        10         0    1    0    1        +1
+             13        11         1    1    0    1        -2
+             14         9         1    0    0    1        -1
+             15         8         0    0    0    1        -4
+
+           ( 16      - - -        0    0    0    0 )
+
+
+ The last column  M = grayndcs(n)  of  Change-Indices  tells which bit,
+ namely  b|m| ,  will change and which way,  namely by  sign(m) .
+
+
+ GrayPack's  sequence of  Gray  codes exhibited here is the most common
+ since its  G(1+k)  and index  k  determine each other though no more be
+ known about  n  than that  2^n > k .  Other sequences can be obtained
+ by permuting and/or complementing columns under the  bj's ,  or by
+ cyclically  reodering the indices under  k ;  every such sequence of
+ Gray  codes is a periodic function of index  k  with period  2^n ,  so
+ we redefine  G(1+k) = G(1 + mod(k, 2^n))  when  k < 0  or  k >= 2^n .
+
+ GrayPack  lets  Gray  codewords be represented in two ways.  MATLAB's
+ usual way is a single  8-byte  floating-point number like those in the
+ first two columns tabulated above.  The second way is a  Bit-Row  like
+ B = [b1, b2, ..., bn]  in which each  bj  is an  8-byte floating-point
+ number either  0.0  or  1.0 .  Bit-rows waste memory but may save time
+ in some applications.  GrayPack's  Gray  code programs let their user
+ choose to manipulate either or both representations.  However,  there
+ are limits:  MATLAB's  consecutive integers all have magnitudes running
+ from  0 to 2^53 = bitmax + 1 .  MATLAB's  bigger  8-byte floating-point
+ integers are no longer consecutive;  they are all even (or infinite);
+ GrayPack  rejects them though it accepts bit-rows  B  with dimension
+ n > 53 .  MATLAB 7  and later versions support the computer's native
+ unsigned integer  uint**  data-types;  rewriting  GrayPack's  programs
+ to use one would shrink memory occupancy and increase speed noticeably,
+ and simplify checking of input arguments.  But then  GrayPack  would
+ not work under the last version,  MATLAB 5.2,  that runs on my favorite
+ old computer,  a  1992 33 MHz. 68040-based Apple Macintosh Quadra 950.
+
+
+
+ Conversions
+ ~~~~~~~~~~~
+ Two functions convert   bit-rows  <-->  integers.  If column  K  of  m
+ integers relates to  m-by-n  logical array  Br  of ones and zeros via
+        either   Br = int2btr(K, n)    or    K = btr2int(Br)
+ then  K = Br*[1; 2; 4; ...; 2^(n-1)]  in the simplest case,  namely if
+ 0 < n < 54  and  0 <= K < 2^n .  Otherwise  int2btr(K, n)  treats  K
+ as if it were  mod(K, 2^n) .  Both functions require  0 < n < 54 .
+
+ Two functions map  integer bit-rows Br  <-->  Gray code bit-rows Gr .
+ If  Br  and  Gr  are  m-by-n  logical arrays whose every element is a
+ one or a zero  (i.e.  Br = (Br ~= 0) ,  Gr = (Gr ~= 0) )  related via
+         either   Br = gray2btr(Gr)    or    Gr = btr2gray(Br) ,
+ then   btr2int(Gr(i,:)) = G(1 + btr2int(Br(i,:)))  for  G = grays(n)
+ and for  0 < i <= m ,  except that dimension  n  can exceed  53  now.
+ Moreover,  for arbitrary same-sized logical arrays  X  and  Y  both of
+ these function satisfy the same commutative identity ...
+        btr2gray(xor(X, Y)) == xor(btr2gray(X), btr2gray(Y))   and
+        gray2btr(xor(X, Y)) == xor(gray2btr(X), gray2btr(Y)) .
+
+
+ Two function map   integer indices  k  <-->  Gray code integers  g .
+ If  MATLAB  arrays  k  and  g  of nonnegative integers are related via
+       either   g = int2gray(k, n)    or    k = gray2int(g)
+ then every  g(i,j) =  G(1 + mod(k(i,j), 2^n))  wherein  G = grays(n)
+ without computing all  2^n  elements of  G ,  provided  0 < n < 54 .
+ Though  0 <= k = gray2int(g) < 2^n  if  0 <= g < 2^n ,  int2gray(k, n)
+ accepts a wider range of input integer indices  k .  Both functions
+ run only in  MATLAB 5  and later versions.  Moreover,  if  X  and  Y
+ are same-sized arrays of nonnegative integers less than  2^n ,  both
+ functions satisfy the same commutative identity ...
+     gray2int(bitxor(X, Y)) == bitxor(gray2int(X), gray2int(Y))   and
+  int2gray(bitxor(X, Y), n) == bitxor(int2gray(X, n), int2gray(Y, n))  .
+
+
+
+ Single Steps through the  Gray Codes
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Two functions  graystep  and  graynext  go from a given  Gray  code to
+ one of its two immediate neighbors represented in the same way.
+
+ Given a  Gray  code's bit-row  Br = (Br(:)' ~= 0) ,  a neighbor's is
+                       Hr = graystep(d, Br) ,
+ forward if  d > 0 ,  else backward,  and computed rather faster than
+      Hr = int2btr(int2gray( 2*(d>0)-1 + gray2int(btr2int(Br)) )) .
+   (The current version of  graystep  runs faster again than before.)
+ Which bit of  Hr  differs from the corresponding bit of  Br ?  It is
+ the sole nonzero element of bit-row  Dr = Hr - Br .  This element
+ Dr(m)  has index  m = abs(sum(cumsum(fliplr(Dr)))) ;  and  sign(Dr(m))
+ tells which way the bit changed.  The change-index is  m*sign(Dr(m)) .
+ The bit-rows' common length  n  is limited only by available memory.
+
+ Given  n  and an array  g  of  n-bit  Gray  codes' representations as
+ nonnegative integers,  their neighbors' respective representations in
+ MATLAB 5  and later versions constitute the nonnegative integer array
+                       h = graynext(d, g, n) ,
+ forward where  d > 0 ,  else backward,  wherein  d  is either a scalar
+ or an array the same size as  g .  CONSTRAINT:  0 <= g < 2^n <= 2^53 .
+ Which single bit of  h(i,j)  differs from the corresponding bit of
+ g(i,j) ?  Counting from  1  for the least significant (rightmost) bit,
+ the changed bit is number  m(i,j)  where  m = 1 + log2(abs(h - g)) ;
+ and  sign(h - g)  tell which way the corresponding bits changed.
+
+ Change-Indices,  like  m...  above,  tell which bit of a  Gray  code
+ will change after a step forward to the next codeword,  and are also
+ made to tell the change's direction.  M = grayndcs(n)  is a column of
+ 2^n  change-indices corresponding to the column  G = grays(n)  of  Gray
+ codes.  Counting up from  1  for the least-significant (rightmost) bit
+ of  G(1+k) ,  the advance to  G(1 + k+1)  changes bit number  |M(1+k)|
+ by  sign(M(k+1)) .  The last change-index  M(2^n)  is for the change
+ from  G(2^n)  back to  G(1) .  Only memory capacity and your patience
+ impose a limit upon  n  in  grayndcs(n) .
+
+
+
+ Application of  Gray Codes  to the  Digital Goniometer
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ This device encodes the angle,  through which a circular disk has been
+ turned,  as a  n-bit  binary integer with a resolution of  1/2^n  of a
+ revolution.  Inscribed in the disk are  n  circular tracks concentric
+ with it,  and  2^(n-1)  uniformly spaced straight lines through the
+ disk's center.  The lines partition each track into  2^n  equal cells
+ half of which are filled with metal;  the others are insulating.  There
+ are  n  wire brushes mounted along a fixed ray running over a radius of
+ the disk and aligned so that each brush touches a different track.  The
+ brushes serve as electrical switches;  each one closes when its brush
+ touches a metal-filled cell.  Cells along the  Kth  radius of the disk
+ are metal-filled or insulating according as the elements of the  Kth
+ bit-row  Br  above are  1  or  0 .  Consequently the electrical outputs
+ from all  n  switches,  regarded as an  n-bit binary integer  g ,  step
+ through consecutive  Gray Codes  in array  grays(n)  as the disk turns.
+
+ Gray Codes  can be used in a similar way to encode the linear travel of
+ a pneumatically or hydraulically driven piston,  or of an iron rod in
+ a solenoid activated electrically.  And the switches can be photocells
+ sensing black or reflective cells,  instead of brushes touching metal.
+
+ Before the  Gray Code  g  put out by the switches can be interpreted as
+ a linear position it must be converted to an integer  k = gray2int(g) .
+ This computation can be done electronically instead by  n  layers of
+ EXCLUSIVE OR  gates,  but all that is a story for another day.
+
+ Why use  Gray Codes  instead of filling cells so that the switches'
+ outputs would step through consecutive binary integers?  Using  Gray
+ Codes  renders the  Goniometer  tolerant of tiny variations among the
+ positions and lengths of cells and of brushes.  So long as each brush
+ touches just its own track,  the switches' electrical outputs cannot be
+ wrong by more than one step through the  Gray Codes.  Consequently the
+ Goniometer's  accuracy matches its resolution.  Were the cells filled
+ to produce electrical outputs intended to step through consecutive
+ binary integers,  an error in one switch's bit-position could throw the
+ Goniometer  off by as much as half a revolution.  (An error as bad as
+ this can be caused also by the utter failure -- stuck closed or open --
+ of a single switch no matter whether codes are binary or  Gray.)
+
+
+ The designers of  Hitachi  hard disk drives in  San Jose, CA,  patented
+ "Skew-tolerant Gray Codes"  ordered differently than the ones tabulated
+ above.  Besides adjacent codewords that differ in just one bit-position
+ as do all  Gray  codes,  these are so constrained that each triple of
+ consecutive codewords vary in just the same two adjacent bit-positions.
+ For  n > 2  the number of these skew-tolerant  n-bit  codewords is
+     if  n  is odd then  4*3^((n-1)/2) - 4  else  16*3^((n-4)/2) - 4 .
+ Here is an example for  n = 4  with  12  codewords:
+
+                                                 change-
+                 k         b1   b2   b3   b4      index
+                ---       ---- ---- ---- ----     ~~~~~
+                 0          0    0    1    1       +1
+                 1          1    0    1    1       +2
+                 2          1    1    1    1       -3
+                 3          1    1    0    1       -4
+                 4          1    1    0    0       +3
+                 5          1    1    1    0       -2
+                 6          1    0    1    0       -1
+                 7          0    0    1    0       +2
+                 8          0    1    1    0       -3
+                 9          0    1    0    0       +4
+                10          0    1    0    1       +3
+                11          0    1    1    1       -2
+
+              ( 12          0    0    1    1       +1 )
+
+
+ These skew-tolerant codes combine with other means to achieve a finer
+ resolution than ordinary  Gray  codes could achieve in the face of some
+ tiny misalignments that degrade the performance of hard disk drives.
+ For details see  U.S. Patents #6885321 and #7119975 (2006),  but beware
+ their many presumably unintentional typos.  Further enhancements appear
+ in  "Construction of Distance-Separated Gray Codes"  by  M. Blaum,  K.
+ Lakovic  and  B. Wilson,  Proc. IEEE GLOBECOM 2006,  #1-4244-0357-X06.
+
+
+
+ Application of  Gray Codes  to  Hamiltonian Circuits  in  Hypercubes.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Regard logical bit-row  B  as the coordinates of a point in  n-space.
+ The set of all  2^n  such points constitutes a  (hyper)cube's vertices.
+ Its edges are line segments parallel to coordinate axes,  segments that
+ join pairs of neighboring vertices which differ in only one coordinate.
+ The array  G = grays(n) ,  or the sequence of rows   B = graystep(1, B)
+ starting at  B = zeros(1,n)  and running  2^n - 1  steps,  enumerates a
+ sequence of vertices on a closed path that traverses only  2^n  of the
+ n*2^(n-1)  edges and touches every one of the  2^n  vertices just once.
+ Such a path is called a  "Hamiltonian Circuit".
+
+ A  Hypercube Architecture  for massively parallel computation connects
+ each of  2^n  processors tightly to just  n  "neighbors"  as if they
+ were positioned at the vertices of an  n-dimensional hypercube.  All of
+ them are connected also to one more central computer as if it were the
+ conductor of the orchestra;  and each processor has its own memory.  To
+ multiply two matrices of enormous dimensions,  each is broken into  2^n
+ submatrices distributed over the hypercube's processors with the aid of
+ Gray  codes,  and then the multiplication is carried out with nearly
+ minimal time wasted waiting for communications among memories.  For the
+ details see  J.W. Demmel's  lecture notes posted on the world-wide web:
+     <www.cs.berkeley.edu/~demmel/cs267/lecture11/lecture11.html> .
+
+
+
+ Application of  Gray Codes  to  Exhaustive Searches and Optimizations
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Suppose a function  F  depends upon,  among other things,  an array of
+ parameters each of which can take only a few discrete values.  Little
+ generality is lost by assuming also that each of the  n  parameters can
+ take only the values  0  and  1 .  Then the function in question can be
+ written either as  F(g)  where  g  is an  n-bit  integer,  or as  F(Br)
+ where bit-row  [b1, b2, b3, ..., bn] = Br = (Br(:)' ~= 0) .
+
+ Suppose further that  F  costs very much more to compute than does the
+ change in  F  when one of its  n  binary parameters  bj  changes.  A
+ situation like this motivated the construction of the  MATLAB  programs
+ that manipulate  Gray Codes  to help locate the maximum of  F .  Other
+ searches,  such as for parameters where  F  falls between preassigned
+ thresholds,  can be assisted the same way.  A costly computation of,
+ say,  F(0)  was followed by  (2^n - 1)  cheap incremental computations
+ of  F(g)  as  g  was stepped through the  Gray Codes.  This brute-force
+ approach would have taken intolerably long had  n  been too big.
+
+ When  n  is not too big,  stepping through the column  M = grayndcs(n)
+ of change-indices may obviate the need for anything else in  GrayPack
+ to help conduct an exhaustive search.  Because  |M| <= n ,  all change-
+ indices are small integers that fit into a column of  2^n  short words.
+
+
+
+ Example of  Incremental Exhaustive Exploration
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ This example arose from a problem posed by  Prof. Michael Slawinski  of
+ Memorial Univ.,  Newfoundland.  Given are two real symmetric  L-by-L
+ matrices  X  and  Y .  Each of them has  n = L*(L+1)/2  elements on and
+ above the diagonal.  There are  2^n  symmetric matrices  W  whose every
+ element  W(i,j)  can be chosen to be either  X(i,j) + Y(i,j)  or else
+ X(i,j) - Y(i,j))  independently of the other  n-1  choices.  For every
+ such chosen  W  its ordered eigenvalues form a column  w  regarded as a
+ point's coordinates in  L-space.  The distribution of these points may
+ have physical significance,  so all  2^n  of them must be computed.
+
+ This task's first step is the construction of a mapping from indices  m
+ of  bm  in the bit-row  Br = [b1, b2, b3, ..., bn]  to the  n  pairs
+ (I(m), J(m))  of indices that locate matrix elements  W(I(m), J(m))
+ and  W(J(m), I(m)) .  The simplest way constructs two  n-columns  thus:
+
+       m = 0 ;  I = zeros(n,1) ;  J = I ;  %... preallocates memory
+       for i = 1:L,  for j = i:L
+              m = m+1 ;  I(m) = i ;  J(m) = j ;  end,  end
+
+ Then,  for  k = 1:2^n ,  a desired eigenvector-column  w(:,k)  consists
+ of the sorted eigenvalues of a  k-th  matrix  W  whose  L^2  elements
+ are computed  (for  m = 1:n )  from a  k-th  bit-row  Br  via a formula
+ W(J(m),I(m)) = W(I(m),J(m)) = X(I(m),J(m)) + (2*Br(m) - 1)*Y(I(m),J(m))
+ after which  Br  is advanced to the next of the  2^n  Gray  codewords.
+
+
+ The advantage of  Gray  codes  Br  over integers  Br = int2btr(k-1,n)
+ is substantial only if  L  is big,  n  huge and  2^n  gargantuan,  in
+ which case two economies will reduce computation time.  The first uses
+ just one change-index  m  to alter one or two elements of  W  instead
+ of recomputing all  L^2  of them from the previous paragraph's formula.
+ Whether  m = M(k)  from  M = grayndcs(n) ,  or  |m|  is computed from
+ the difference between  graystep(1,Br)  and  Br  as explained above
+ under  "Single Steps through the  Gray Codes",  doesn't matter.  Just
+ update  W(I(|m|),J(|m|))  and,  unless  I(|m|) = J(|m|) ,  also update
+ W(J(|m|),I(|m|))  to   W(I(|m|),J(|m|)) + 2*sign(m)*Y(I(|m|),J(|m|)) ,
+ assuming the initial  W = X - Y  as required by the initial  Br = 0 .
+
+ The second computational economy exploits the low rank,  1  or  2 ,  of
+ the matrix added to  W  to update it.  (Every  L-by-L  symmetric matrix
+ of rank  2  decomposes into a sum of two symmetric matrices of rank  1
+ each of the form  s*v*v'  whose  s  is a scalar and  v  an  L-vector.)
+ Given all the eigenvalues and eigenvectors of  W ,  the eigenvalues and
+ eigenvectors of a  rank-1 update  W + s*v*v'  are computable relatively
+ quickly by procedures discussed in the book  "Matrix Computations"  3rd
+ ed. (1996)  by  G.H. Golub  and  C.F. Van Loan,  section  "Eigensystems
+ of Diagonal Plus Rank-1 Matrices",  and elaborated in papers cited at
+ the section's end.  Moreover these procedures lend themselves well to
+ parallel computation unless the computers perform divisions extremely
+ slowly without pipelining them.  Thus may  Gray  codes speed things up.
+
+
+
+ Test Program  graytest.m
+ ~~~~~~~~~~~~~~~~~~~~~~~~
+ A function  graytest(n)  tests whether  GrayPack's  other ten functions
+         grays       gray2int    int2gray    btr2int    graynext
+         grayndcs    gray2btr    btr2gray    int2btr    graystep
+ function correctly.  The test passed when run under  MATLAB 5.2  on my
+ Mac Quadra 950  and on an  iMac,  and when run under  MATLAB 6.5  on a
+ Wintel PC,  for  n = 1:12 .  See the text of  graytest.m  to ascertain
+ whether the test is valid and thorough enough.  As usual,  this test is
+ a bit more complicated than any of the programs tested and consequently
+ more prone to error.  Graytest  runs on  MATLAB 5  and later versions.
+
+
+
+ Other Programs
+ ~~~~~~~~~~~~~~
+ A program  gc2dec.m  submitted to  MATLAB Central  in mid  2005  by
+ Arjun Srinivasan Rangamani  does rather slower,  especially when
+ length(Br)  is big,  what either  gray2int( btr2int(fliplr(Br)) )  or
+ btr2int( gray2btr(fliplr(Br)) )  does.  Adrian  at  ubicom.tudelft.nl
+ has submitted two programs:  his  gray2bi  is like but slower than our
+ gray2btr;  his  bi2gray  is like but slower than our  btr2gray .  The
+ PASCAL  programs in  Robert W. Dornan's  "The Gray Code"  (Mar. 2007)
+ posted at  <www.cs.auckland.ac.nz/CDMTCS//researchreports/304bob.pdf>
+ gain elegance from recursion at the cost of a little speed.  GrayPack
+ has no  Recursive (reentrant) programs;  some use a  Recurrence (loop).
+
+                  Prof. W. Kahan,        <www.cs.berkeley.edu/~wkahan>
+
+ =======================================================================
+
+ Information for  MATLAB Central:
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                <mathworks.com/matlabcentral/filexchange>
+
+
+ Title:  Manipulation of Binary Gray Codewords
+ ~~~~~~
+
+ Description:   A package  "GrayPack"  of MATLAB programs to manipulate
+ ~~~~~~~~~~~~   Cyclic n-bit Binary Gray Codes  and convert between two
+ ways to represent them,  one as  n-bit  integers for  0 < n < 54 ,  the
+ other as logical bit-rows each of unbounded length  n .  GrayPack  also
+ includes one program to test all ten others,  plus a lengthy text-file
+ that describes the package and notes a few applications like tolerant
+ conversions of mechanical positions to digital signals,  Hamiltonian
+ circuits of hypercubes,  and exhaustive incremental explorations.
+
+ Supersedes an earlier version dated  13 July 2009,  File ID #15570
+
+
+ MATLAB Release:  5.2 (R 10)
+ ~~~~~~~~~~~~~~~
+
+ GrayPack's Contents:  Twelve files,  namely
+ ~~~~~~~~~~~~~~~~~~~~  grays.m      grayndcs.m   graystep.m   graynext.m
+                       gray2int.m   int2gray.m   gray2btr.m   btr2gray.m
+                     GrayCode.txt   graytest.m   btr2int.m    int2btr.m
+
+ Tags:  Gray codes,  goniometer,  tolerant analog-to-digital conversion,
+ ~~~~~  hypercube,  Hamiltonian circuit,  exhaustive incremental search.
+
+

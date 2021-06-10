@@ -1,0 +1,5 @@
+This toolbox is dual-license software.
+
+For educational and research purposes this software is released under GPL version 3.
+
+For commercial purposes a restricted license applies, contact scott.rickard@ucd.ie

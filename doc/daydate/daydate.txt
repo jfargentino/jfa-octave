@@ -1,0 +1,255 @@
+
+
+   DAYDATE:  Computing  Days between Dates,  the Day of the Week,  etc.
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                              by  Prof. W. Kahan
+        Elect. Eng. & Computer Science,   Univ. of Calif. at Berkeley
+                                 16 Sept. 1992
+
+   What is desired is a program that can tell how many days elapse between
+   any two given dates,  or on what day of the week a given date falls,  or
+   what date comes a specified number of days past a given date.  To write
+   such a program,  a programmer must understand the  Gregorian  calendar.
+
+   The calendar promulgated by  Julius Caesar  in  45 B.C.  had slipped out
+   of step with the seasons so far by  4 Oct. 1582  that  Pope Gregory XIII
+   declared the next day to be  15 Oct. 1582  and promulgated the calendar
+   that now bears his name.  Obedient  Catholics  accepted the new calendar
+   hoping to enter  Heaven  ten days sooner.  But adherents to the  Church
+   of England  declined to do likewise,  keeping  Julius Caesar's  calendar
+   in force throughout the  British Empire.  Finally,  Parliament  decided
+   to rejoin  Western Europe  and declared the day after  2 Sept. 1752  to
+   be  14 Sept. 1752.  That day riots broke out among  Englishmen  who
+   resented the loss of eleven days from their lives.  Russia  adopted the
+   Gregorian  calendar only after the  October  revolution  in  1917.
+
+   Why so much fuss over a calendar?  The trouble is that a solar year has
+   about  365.2422  days on average.  Julius Caesar  approximated that with
+   a  365  day year plus an extra  366th  day,  Feb. 29,  every fourth year
+   ( called a  " leap-year ").  His years lasted a little too long,  365.25
+   days on average,  causing his calendar to lag farther behind the seasons
+   every fourth year.  Gregory XIII  accepted the best advice available at
+   the time,  which was to deny  leap-year  status to any century year not
+   divisible by  400  as well as  100.  Hence,  1600  was a leap-year,  and
+   2000  will be another;  but  1700, 1800  and  1900  were not leap-years.
+   Gregory's  years last  355.2425  days on average;  they last a tiny bit
+   too long.  A better scheme would deny  leap-year  status to  millennial
+   years divisible by  4000  too.  If this better scheme is adopted,  the
+   years  2000  and  6000  will be leap-years  but not  3000,  4000,  5000,
+   7000,  8000,  9000 .  Then a year will last  365.24225  days on average,
+   which should keep seasons in their places for at least  16,000  years.
+
+   How many days pass in the course of some number,  say  y ,  of years?
+   To account properly for leap-years,  we number the years from a notional
+   year numbered  0 ,  and count the days  d  from the end of year number
+   0  to the end of year number  y  thus:
+
+   Julius Caesar's Calendar:     d = 365 y  +  floor(y/4)  .
+
+   Gregory XIII's Calendar:
+     d = 365 y  +  floor(y/4) - floor(y/100) + floor(y/400)
+        so ...     d - 18/25  ó  365.2425 y  ó  d + 591/400 .
+
+   16,000 year Calendar:
+     d = 365 y  +  floor(y/4) - floor(y/100) + floor(y/400) - floor(y/4000)
+        so ...   d - 411/250  ó  365.24225 y  ó  d + 5607/4000 .
+
+   Another inheritance from  Julius Caesar's  calendar is a somewhat ragged
+   allocation of days to months,  memorized in schools thus:
+     "  30  days hath  September,  April,  June  and  November;  the rest
+        have  31  except for  February's  28,  or  29  in leap-years."
+   To understand this,  one should know that,  before  Julius Caesar,  the
+   Romans  used a  Vernal  calendar that began with  Spring  on  March 1 .
+
+
+
+   Let us number the months with  m = 0  for  March,  m = 1  for  April,
+   m = 2  for  May,  ...,  m = 10  for  January  and  m = 11  for  February
+   in this  Vernal  calendar.  Then the number  d  of days in the  Vernal
+   year that precede the first day of  Vernal  month  m  turns out to be
+              d  =  floor( 30.6 m  +  0.5 )    for   0 ó m ó 11 .
+   Conversely,  day number  D  of the  Vernal  year,  starting with  D = 1
+   on the first of  March  ( m = 0 ),  occurs in  Vernal  month number
+              m  =  floor( (D - 0.5)/30.6 )    for   1 ó D ó 366 .
+   ( How can you confirm these formulas?  Must you check  12+366  cases? )
+   These formulas are very little known;  most programmers use instead two
+   tables,  one that tells how many days each month possesses,  another
+   that tells which days of the non leap-year mark the end of each month.
+
+
+   Astronomers  mark the days with a serial number called a  " Julian Day
+   Number "  that counts days from a notional date,  1 Jan. 4713 B.C.,  on
+   which certain astrologically significant cycles coincided.  ( " Julian "
+   here honors not  Julius Caesar  but another soldier and scholar,  Julius
+   Caesar Scaliger  (1484-1558);  his son,  Joseph Justus Scaliger  (1540-
+   1609),  the pre-eminent  Protestant  scholar of the sixteenth century,
+   invented  Julian  day numbers to synchronize the chronology of ancient
+   Roman,  Greek,  Persian,  Egyptian  and  Babylonian  history in order
+   that classical scholars could ascertain the priorities for ideas among
+   those civilizations.)  The  Julian  day number for  Sat. 1 Jan. 1600
+   happens to be  2,305,448 ,  and all other dates can be counted forward
+   or back from that one.  To count days between two dates,  subtract their
+   Julian  day numbers.  How can a date's day of the week be determined?
+
+
+   Given the foregoing information,  you should now be able to program your
+   computer or programmable calculator to count days between dates,  to
+   find what date follows another by a specified number of days,  and to
+   determine the day of the week for any date in the  Gregorian  calendar.
+   The crucial parts of such a program are procedures that convert a given
+   Gregorian  calendar date's  Day-Month-Year  into a  Julian  day number,
+   and  vice-versa.  Not every triple of numbers purporting to be a date is
+   legitimate;  for example  29-2-1900  and  13-13-1992  are invalid dates.
+
+   Programs that convert invalid data into plausible results are deceitful.
+
+   Therefore,  check the validity of any alleged  Day-Month-Year  date by
+   converting it to a  Julian  day number and then converting that back to
+   a  Day-Month-Year  date to see whether the original date is recovered.
+   This will circumvent the need for a battery of tests:  Is  Day < 1 ?  Is
+   Day  too big for  Month ?  Is  Month < 1 ?  Is  Month > 12 ?   However,
+   Julian  day numbers do have to be scrutinized to reject or re-process
+   dates preceding the adoption of the  Gregorian  calendar in those
+   jurisdictions for which the program is intended.
+
+   Do not be dismayed if your program produces results different from what
+   you may find in some other computer systems for dates not between  1800
+   and  2100.  Many computer systems use  Julius Caesar's  calendar shifted
+   to align with  1900  plus a special test to deny it leap-year status.  No
+   computer has been programmed for correct dates after  28 Feb. 4000  A.D.
+   because there is no consensus on whether that year will be a leap-year.
+   The  HP-12C  financial calculator thinks it will,  and recognizes dates
+   from  15 Oct. 1582  until  Sun. 25 Nov. 4046 ;  will the world end then?
+   IBM PCs  and clones accept dates from  1 Jan. 1980 ,  the year  IBM's
+   PC  was introduced,  until  31 Dec. 2099 ;  what will happen after that?
+
+
+
+   Conversion Formulas:                    Can you confirm them?
+   ~~~~~~~~~~~~~~~~~~~~
+
+
+   Day  D  of  Vernal  year      <-->      Day  d  of  Vernal  month  m
+   ( D = 1, 2, 3, ..., 366 )               (  d = 1, 2, 3, ..., 31  and
+                                              m = 0, 1, 2, ..., 11 )
+     m = floor( (D - 0.5)/30.6 )
+     d = D - floor( 30.6 m + 0.5 )          D = d + floor( 30.6 m + 0.5 )
+
+
+
+   Calendar year  Y  month  M     <-->     Vernal year  y  month  m
+   ( M = 1, 2, 3, ..., 12  for             ( m = 0, 1, 2, ..., 11  for
+     Jan., Feb., Mar., ..., Dec.)            Mar., Apr., May, ..., Feb.)
+
+     If  M < 3  then                         If  m < 10  then
+                    m = M+9                                  M = m+3
+                    y = Y-1                                  Y = y
+                else                                     else
+                    m = M-3                                  M = m-9
+                    y = Y                                    Y = y+1
+                end if.                                  end if.
+
+    Note that  Calendar  and  Vernal  years match for  March - December,
+    but  February  of  Calendar  year  Y  lies in  Vernal  year  y = Y-1 ,
+    so  Vernal  year  Y-1  is a leap-year when  Calendar  year  Y  is.
+
+    Nov  Dec   Jan  Feb   Mar  Apr  ...  Nov  Dec   Jan  Feb   Mar  Apr
+    C# = Y-1   <----------  C# = Y  ------------>   <---  C# = Y+1  ---
+    ---  V# = Y-1  --->   <----------  V# = Y  ------------>   V# = Y+1
+
+
+
+   Day  D  of  Vernal  year  y     <-->       Pseudo-Julian  Day number  j
+   (  1 ó D ó 366 ,  0 < y  )                 ( Differs by a constant from
+                                                true  Julian  Day number.)
+
+   For the  Gregorian  calendar,  let
+   f(y) := 365 y + floor(y/4) - floor(y/100) + floor(y/400) ,
+   g(j) := floor( (j + 0.48)/365.2425 )
+
+   For the  16,000  year calendar,  let
+   f(y) := 365 y + floor(y/4) - floor(y/100) + floor(y/400) - floor(y/4000)
+   g(j) := floor( (j + 0.402)/365.24225 ) .
+
+   j  =  D + f(y)                           u  =  g(j)
+                                            if  j > f(u)  then
+                                                              y = u
+                                                          else
+                                                              y = u-1
+                                                          end if
+                                            D  =  j - f(y)
+
+
+   The constants given above have been adjusted to compensate for most
+   rounding errors,  but not in divisions by  4 ,  100 ,  400  and  4000 ,
+   so roundoff may interfere with dates in years  y  beyond a few million.
+
+
+ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+ 
+
+From: "W. Kahan" <wkahan@CS.Berkeley.EDU>
+Subject: 16000 year calendar
+To: asb@eci2.ucsb.edu
+Date: Tue, 8 Jul 1997 20:20:25 -0700 (PDT)
+In-Reply-To: a query from  from "Aaron Brown" at Jun 12, 97 04:02:59 pm
+
+> 
+> Hi.  I came across your web page
+> http://HTTP.CS.Berkeley.EDU/~wkahan/daydate/daydate.doc.  I very much
+> enjoyed reading it.  It was informative, as well as interesting.  I
+> particularly enjoyed reading about the reactions of the people when the
+> calendar skipped 10 or 11 days.
+> 
+> I think I may have found an error.  You say, "A better scheme would deny
+> leap-year  status to  millennial years divisible by  4000  too.  If this 
+> better scheme is adopted,  the years  2000  and  6000  will be leap-years  
+> but not  3000,  4000,  5000, 7000,  8000,  9000 ."
+> 
+> I don't follow that statement.  It seems that you want to say that the
+> years 4000 and 8000 will not be leap years, but that 5000, 6000, and 7000
+> would be leap years.  Please let me know if I am mistaken or if I am not
+> understanding this.
+> 
+> Thanks.
+> 
+> Aaron
+> http://eci.ucsb.edu/~asb
+> http://www.csua.berkeley.edu/~asb
+> 
+ 
+      I'm sorry the statement was unclear.  Perhaps this will help:
+      
+      Let the year number be  IJKL .  This year has
+                            I = 1 ,  J = K = 9 ,  L = 7 .
+      
+      In  Julius Caesar's  calendar,  the leap years were all those and 
+      only those with  IJKL  divisible by  4 .  In effect that meant that
+      if  KL  was divisible by  4  the year  IJKL  was a leap year,  and 
+      otherwise not.
+      
+      The  Gregorian  calendar differs from  Caesar's  only in century 
+      years  IJ00 ;  Pope Gregory  decreed that these were to be leap 
+      years just when  divisible by  400 ;  in other words,  IJ00  was 
+      to be a leap year just when  IJ  was divisible by  4 .  That's 
+      what we've been doing for about  400  years or,  in some jurisdictions,
+      somewhat fewer.  And millennial years  I000  would be leap years just 
+      when  I  is even,  if  Gregory's  decree were followed for them too.
+      
+      My proposal differs from  Pope Gregory's  only in millennial years 
+      I000 ;  the proposal would let these be leap years just when  I000 
+      is divisible by  400  but  NOT  divisible by  4000 ;  in other words,  
+      I000  is to be a leap year just when  I0  is divisible by  4  but  I
+      is not,  which is the same as saying  I  is even but  I/2  isn't.
+      
+      Now let's consider which millennial years are to be leap years under 
+      the two schemes:
+      
+      Gregory's:   2000, 4000, 6000, 8000, 10000, 12000, 14000, ...
+      Mine:        2000,       6000,       10000,        14000, ...
+
+      The year  4000  is the first that would be different,  but neither of
+      us will be around to see which way it goes.
+                                                         W. Kahan
+                                                         
+

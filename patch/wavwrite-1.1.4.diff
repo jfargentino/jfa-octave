@@ -1,0 +1,26 @@
+--- wavwrite.m	2012-06-12 12:43:39.392488313 +0200
++++ wavwrite.m	2012-06-12 12:44:59.102050080 +0200
+@@ -64,6 +64,8 @@
+       format = "uint8";
+     case 16
+       format = "int16";
++    case 24
++      format = "uint8";
+     case 32
+       format = "int32";
+     otherwise
+@@ -131,6 +133,14 @@
+       yi = round (yi*128 + 128);
+     case 16
+       yi = round (yi*32768);
++    case 24
++      yi = round (yi * 2^23);
++      yi (yi == 2^23) -=1;
++      yi (yi < 0) += 2^24;
++      msb = bitshift (yi, -16);
++      mid = bitand (bitshift (yi, -8), 255);
++      lsb = bitand (yi, 255);
++      yi = [lsb, mid, msb]';
+     case 32
+       yi = round (yi*2147483648);
+   endswitch

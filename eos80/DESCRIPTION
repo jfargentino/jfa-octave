@@ -1,0 +1,11 @@
+Name:        jfa-eos80
+Version:     0.0.1
+Date:        2021-10-06
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA EOS80 ToolBox
+Description: Physical seawater properties EOS80
+Categories:  Oceanography
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+License:     Copyright JFA

@@ -1,0 +1,11 @@
+Name:        jfa-conversion
+Version:     0.0.9
+Date:        2021-10-06
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA Conversion ToolBox
+Description: Some useful conversion scripts, between units or formats
+Categories:  General
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+License:     Copyright JFA

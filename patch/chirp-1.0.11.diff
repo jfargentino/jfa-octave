@@ -1,0 +1,27 @@
+--- /usr/share/octave/packages/signal-1.0.11/chirp.m	2011-05-25 10:37:00.000000000 +0200
++++ chirp.m	2011-06-06 16:59:54.000000000 +0200
+@@ -56,21 +56,19 @@
+   if isempty(form), form = "linear"; endif
+   if isempty(phase), phase = 0; endif
+ 
+-  phase = 2*pi*phase/360;
+-
+   if strcmp(form, "linear")
+     a = pi*(f1 - f0)/t1;
+     b = 2*pi*f0;
+-    y = cos(a*t.^2 + b*t + phase);
++    y = sin(a*t.^2 + b*t + phase);
+   elseif strcmp(form, "quadratic")
+     a = (2/3*pi*(f1-f0)/t1/t1);
+     b = 2*pi*f0;
+-    y = cos(a*t.^3 + b*t + phase);
++    y = sin(a*t.^3 + b*t + phase);
+   elseif strcmp(form, "logarithmic")
+     a = 2*pi*t1/log(f1-f0);
+     b = 2*pi*f0;
+     x = (f1-f0)^(1/t1);
+-    y = cos(a*x.^t + b*t + phase);
++    y = sin(a*x.^t + b*t - a*x(1)^t(1) - b*t(1) + phase);
+   else
+     error("chirp doesn't understand '%s'",form);
+   endif

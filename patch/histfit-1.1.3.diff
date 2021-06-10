@@ -1,0 +1,11 @@
+--- histfit.m	2012-12-06 14:42:26.516170724 +0100
++++ histfit.m	2012-12-06 14:43:35.672167822 +0100
+@@ -61,7 +61,7 @@
+   sr = nanstd(data);  ## Estimates the parameter, SIGMA, of the normal distribution.
+   x=(-3*sr+mr:0.1*sr:3*sr+mr)';## Evenly spaced samples of the expected data range.
+   [xb,yb] = bar(xbin,n);
+-  y = normpdf(x,mr,sr.^2);
++  y = normpdf(x,mr,sr);
+   binwidth = xbin(2)-xbin(1);
+   y = row*y*binwidth;   ## Normalization necessary to overplot the histogram.
+   plot(xb,yb,";;b",x,y,";;r-");     ## Plots density line over histogram.

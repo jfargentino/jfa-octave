@@ -1,0 +1,11 @@
+Name:        jfa-statistics
+Version:     0.0.1
+Date:        2021-6-10
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA Statistics ToolBox
+Description: Statistics functions
+Categories:  Statistics
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+License:     Copyright JFA

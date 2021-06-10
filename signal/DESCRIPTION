@@ -1,0 +1,12 @@
+Name:        jfa-signal
+Version:     0.0.1
+Date:        2021-6-10
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA Signal ToolBox
+Description: Many useful functions for more digital signal processing
+Categories:  Signal Processing
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+Depends:     signal
+License:     Copyright JFA

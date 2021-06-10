@@ -1,0 +1,11 @@
+Name:        jfa-geometry
+Version:     0.0.1
+Date:        2021-10-06
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA Geometry ToolBox
+Description: Playing with geometry at JFA
+Categories:  Geometry
+Url:         jf_argentino.bitbucket.org
+Autoload:    yes
+License:     Copyright JFA

@@ -1,0 +1,12 @@
+Name:        jfa-irig
+Version:     0.0.1
+Date:        2021-10-6
+Author:      JF Argentino
+Maintainer:  JF Argentino
+Title:       JFA IRIG ToolBox
+Description: Read an IRIG-B signal and get the date it contents.
+Categories:  General
+Url:         jf_argentino.bitbucket.org
+Depends:     jfa-conversion
+Autoload:    yes
+License:     Copyright JFA

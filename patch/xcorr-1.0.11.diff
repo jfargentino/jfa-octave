@@ -1,0 +1,15 @@
+--- /usr/share/octave/packages/signal-1.0.11/xcorr.m	2011-06-06 17:03:23.000000000 +0200
++++ xcorr.m	2011-06-06 17:03:53.000000000 +0200
+@@ -209,8 +209,10 @@
+   endif
+   
+   ## Pad result if necesary
+-  R = [zeros(1, pad_result), R, zeros(1, pad_result)];
+-  
++  if (pad_result > 0)
++    R = [zeros(1, pad_result), R, zeros(1, pad_result)];
++  endif
++
+   ## return the lag indices if desired
+   if nargout == 2
+     maxlag += pad_result;

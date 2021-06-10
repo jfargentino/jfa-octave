@@ -1,0 +1,30 @@
+
+ABSTRACT  for  DAYDATE  etc.                        as of  18 March 1996
+
+by   Prof. W. Kahan                              wkahan@cs.berkeley.edu
+     Mathematics Dept. #3840,   and                      (510) 642-5638
+     Elect. Eng. & Computer Science Dept. #1776
+     University of California
+     Berkeley   CA  94720-1776
+
+
+
+
+" Computing  Days between Dates,  the Day of the Week,  etc."
+
+The year  2000  will be a leap year but  2100  will not;  that is how
+the  Gregorian  calendar has been working since  1582 .  Will  4000  be
+a leap year?  Why do  Sept., Apr., June  and  Nov.  have  30  days and
+the rest  31  except for  Feb.?  These questions are discussed,  and to
+save programmers the bother of looking up their answers in tables a few
+formulas are supplied.  These have been embedded in  MATLAB  functions
+ETIME,  J2YMD  and  YMD2J  for handling,  respectively,  elapsed time,
+days between dates,  and the  Day of the Week.  Incidentally,  YMD2J
+descends from an ancient self-checking progam used in  H-P  financial
+calculators since  1976;  despite roundoff,  it assesses the validity
+of its output and input by running an inverse program  J2YMD .  Alas,
+the explanatioin of all this stuff,  the file  daydate.txt,  displays
+properly as an  ASCII  file only on an  IBM PC  or compatible.
+
+Text files:       http://http.cs.berkeley.edu/~wkahan/daydate/ ...
+
