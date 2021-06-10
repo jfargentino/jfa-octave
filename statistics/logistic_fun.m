@@ -1,5 +1,9 @@
 function x = logistic_fun (n, a, x0)
-
+%
+% function x = logistic_fun (n, a, x0)
+%
+% Logistic optim ?
+%
 if (nargin < 3)
     x0 = randn (1);
 end

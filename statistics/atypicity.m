@@ -1,4 +1,11 @@
 function y = atypicity (x, n);
+%
+% function y = atypicity (x, n);
+%
+% Returns a sliding 'atypicity' indicator on x. Atypicity, aka crest factor
+% is the mean / std dev for a n-length sliding windows.
+% Any points over 3 are outliers, or the distribution is not gaussian.
+%
 
 stp = 1;
 y = (x(n:end, :) - sliding_mean (x, n, stp)) ...
@@ -31,12 +38,12 @@ y = (x(n:end, :) - sliding_mean (x, n, stp)) ...
 %! xlim ([1, N-n]);
 %! legend ('gauss', 'exp', 'uniform', 'log norm', 'cauchy');
 %! grid on
-%! tics ('y', [min(x), max(x)]);
+%! yticks ([min(x), max(x)]);
 %!
 %! subplot (2, 1, 2);
 %! plot (y);
 %! xlim ([1, N-n]);
 %! legend ('gauss', 'exp', 'uniform', 'log norm');
 %! grid on
-%! tics ('y', [min(y), max(y)]);
+%! yticks ([min(y), max(y)]);
 

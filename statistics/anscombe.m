@@ -38,10 +38,10 @@ if (nargout == 0)
     Ymin = min([y1; y2; y3; y4]) * 0.9;
     Ymax = max([y1; y2; y3; y4]) * 1.1;
 
-    mx1 = mean (x1);
-    vx1 = var (x1);
-    my1 = mean (y1);
-    vy1 = var (y1);
+    mx1 = mean (x1)
+    vx1 = var (x1)
+    my1 = mean (y1)
+    vy1 = var (y1)
 
     subplot (2, 2, 1);
     plot (x1, y1, 'or');

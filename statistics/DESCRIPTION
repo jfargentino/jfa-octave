@@ -8,4 +8,5 @@ Description: Statistics functions
 Categories:  Statistics
 Url:         jf_argentino.bitbucket.org
 Autoload:    yes
+Depends:     statistics
 License:     Copyright JFA

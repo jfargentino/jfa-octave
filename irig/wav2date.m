@@ -1,6 +1,6 @@
 function wav2date (wavename)
 
-[s, Fs] = wavread (wavename);
+[s, Fs] = audioread (wavename);
 [doy, hour, mn, sec, msec, idx] = irig2time (s);
 usec = msec*1e3 - ((idx - 1) / Fs) * 1e6;
 while (usec < 0)

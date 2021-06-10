@@ -1,5 +1,9 @@
 function [t, p] = student_t_test (x, y)
-
+%
+% function [t, p] = student_t_test (x, y)
+%
+% Student T-Test
+%
 mx  = mean(x);
 xc = x - mx;
 lx  = length(x);

@@ -14,7 +14,7 @@ y = am (oclip (x, m, [-1, 1], 2 - m), wc, 0);
 %! m = 0.25;
 %! n = 256; % Filter order
 %! N = 32768;
-%! [s, fsr] = wavread ('japanese_telecom.wav');
+%! [s, fsr] = audioread ('japanese_telecom.wav');
 %! s = mean (s, 2);
 %!
 %! b = fir1 (n, 2*[1/(kl*kc), 1/(kh*kc)]); a = 1;

@@ -21,7 +21,7 @@ y =  -yi +yq;
 %! m = 1;
 %! n = 256; % Filter order
 %! N = 32768;
-%! [s, fsr] = wavread ('japanese_telecom.wav');
+%! [s, fsr] = audioread ('japanese_telecom.wav');
 %! s = mean (s, 2);
 %!
 %! % MODULATION

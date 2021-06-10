@@ -1,4 +1,7 @@
 function y = sliding_fun (x, w_sz, fun, stp)
+%
+% function y = sliding_fun (x, w_sz, fun, stp)
+% apply 'fun' in a sliding way.
 % TODO optilize it, build the input matrix then call once the fun
 
 if (nargin < 4)

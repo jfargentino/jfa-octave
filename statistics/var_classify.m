@@ -57,8 +57,8 @@ end
 %! [yb, y0, y1]  = var_classify (p(:, 2));
 %! plot (p(:, 1), p(:, 2), 'bo');
 %! grid on;
-%! tics ('x', xb);
-%! tics ('y', yb);
+%! xticks (xb);
+%! yticks (yb);
 
 %!demo
 %!
@@ -76,6 +76,6 @@ end
 %! [xb, x0, x1] = var_classify (x);
 %! %plot (x0, zeros(length(x0)), 'bo', x1, zeros(length(x1)), 'ro')
 %! grid on
-%! tics ('x', xb);
+%! xticks (xb);
 %!
 

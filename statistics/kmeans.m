@@ -57,7 +57,7 @@ end
 %! %plot (x, zeros(length(x)), 'bo')
 %! hist (x, 16)
 %! grid on
-%! tics ('x', xm);
+%! xticks (xm);
 %!
 
 %!demo
@@ -66,5 +66,5 @@ end
 %! [xm, it_nb] = kmeans (x, 2)
 %! plot (x, zeros(length(x)), 'bo')
 %! grid on
-%! tics ('x', xm);
+%! xticks (xm);
 %!

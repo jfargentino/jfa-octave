@@ -12,18 +12,7 @@ MIN_DB = -90;
 % Lecture du signal a analyser
 Fs = 0;
 if( ischar( signal ) )
-   if( length( signal ) > 3 )
-   switch( signal( end-2 : end ) )
-   	case 'wav',
-      [ signal, Fs, B ] = wavread( signal );
-   	case '.au',
-      [ signal, Fs, B ] = auread( signal );
-   	otherwise,
-      [ signal, Fs, B ] = wavread( signal );
-   end
-	else
-      [ signal, Fs, B ] = wavread( signal );
-   end
+  [ signal, Fs ] = audioread( signal );
 end
 
 % Lecture des autres arguments
@@ -98,7 +87,7 @@ if( ~nargout )
    ti = 1 : M;
       
    if( Fs )
-      soundsc( osignal, Fs, B );
+      soundsc( osignal, Fs );
       % F frequences
       F = Fs * ( Fi - 1 ) / nfft;
       % T temps
@@ -117,7 +106,7 @@ if( ~nargout )
          xlabel( 'Secondes' );
          ylabel( 'Hz' );
          grid on;
-   		colorbar;
+   		%colorbar;
       end
       
    else
@@ -138,7 +127,7 @@ if( ~nargout )
          xlabel( 'Echantillons' );
          ylabel( 'Frequences normalisees' );
          grid on;
-   		colorbar;
+   		%colorbar;
       end
    end
    clear fft_array

@@ -119,6 +119,6 @@ s = s (1:L);
 %! title ([method, ' interpolation']);
 %! legend ('psd of the generated noise', 'reference psd'), 
 %! xlabel ('Frequency'), ylabel ('dB / sqrt (Hz)'), hold off
-%! %tics ('x', F);
-%! %tics ('y', 10*log10(P));
+%! xticks (F);
+%! yticks (10*log10(P));
 

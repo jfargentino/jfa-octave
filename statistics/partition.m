@@ -1,5 +1,9 @@
 function xb = partition (x, xb)
-
+%
+% function xb = partition (x, xb)
+%
+% Gaussian partitioning ?
+%
 if (nargin < 2)
     xb = [];
 end
@@ -34,6 +38,6 @@ end
 %! xb = partition (x);
 %! plot (x, zeros(length(x)), 'bo')
 %! grid on
-%! tics ('x', xb);
+%! xticks (xb);
 %!
 
