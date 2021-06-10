@@ -25,6 +25,15 @@ _package_one() {
     cp "$PKG_SRC"/DESCRIPTION "$PKG"
     mkdir "$PKG"/inst
     find "$PKG_SRC" -name "*.m" -exec cp '{}' "$PKG"/inst \;
+    if [ -d "$PKG_SRC"/bin ]; then
+        cp -a "$PKG_SRC"/bin "$PKG"
+    fi
+    if [ -d "$PKG_SRC"/doc ]; then
+        cp -a "$PKG_SRC"/doc "$PKG"
+    fi
+    if [ -d "$PKG_SRC"/data ]; then
+        cp -a "$PKG_SRC"/data/* "$PKG"/inst
+    fi
     tar -czf "$PKG"".tar.gz" "$PKG"
     rm -rf "$PKG"
 }
