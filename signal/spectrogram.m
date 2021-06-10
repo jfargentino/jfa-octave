@@ -1,4 +1,4 @@
-function [ fft_array, sadjusted ] = spectrogram( signal, varargin )
+function fft_array = spectrogram( signal, varargin )
 %
 %function fft_array = spectrogram( signal, chunksize, nfft, overlap, window )
 %
@@ -33,8 +33,6 @@ if( N < C )
    C      = n;
 end
 
-% Sauvegarde du signal original
-osignal= signal;
 oC     = C;
 oN     = N;
 % On rend N multiple de jump
@@ -44,8 +42,7 @@ N      = N + n;
 M      = N / jump - 1;
 % chunksize >= jump, il faut ajuster N
 N      = N + ( chunksize - jump );
-signal = [ signal ; zeros( N-length(signal), C ) ];
-sadjusted = signal;
+x = [ signal ; zeros( N-length(signal), C ) ];
 
 % Allocation du tableau de sortie
 fft_array = zeros( nfft, M );
@@ -56,20 +53,20 @@ offset    = (0:C-1)*M;
 n         = repmat( (0:M-1)*jump + 1, chunksize, 1) + repmat( (0:chunksize-1)', 1, M );
 for( c = 1 : C )
    for( m = 1 : M )
-   	fft_array( :, m + offset(c) ) = [ signal( n(:,m), c ) .* window; padding ];
+   	fft_array( :, m + offset(c) ) = [ x( n(:,m), c ) .* window; padding ];
    end
    %m = 1 : M;
-   %size( signal( n(:,m), c ) )
-   %fft_array( :, m + offset(c) ) = [ signal( n(:,m), c ) .* window; padding ];
+   %size( x( n(:,m), c ) )
+   %fft_array( :, m + offset(c) ) = [ x( n(:,m), c ) .* window; padding ];
 end
 % Et on fait toutes les fft d'un coup
-fft_array = 2 * fft( fft_array ) / chunksize;
+fft_array = fft( fft_array );
 
 %window    = repmat( [ window; zeros( nfft - chunksize, 1 ) ], 1, M );
 %n         = repmat( ( 1 : nfft )', 1, M );
 %m         = repmat( ( 0 : M - 1 ) * jump, nfft, 1 );
 %n         = n + m;
-%fft_array = 2 * fft( signal( n ) .* window ) / chunksize;
+%fft_array = 2 * fft( x( n ) .* window ) / chunksize;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % La suite ne concerne que l'affichage si il %
@@ -87,13 +84,13 @@ if( ~nargout )
    ti = 1 : M;
       
    if( Fs )
-      soundsc( osignal, Fs );
+      %soundsc( signal, Fs );
       % F frequences
       F = Fs * ( Fi - 1 ) / nfft;
       % T temps
       T = ( ti - 1 ) * jump / Fs;
       subplot( 2, 1, 1 );
-      plot( repmat( ( 0 : oN-1 )'/Fs, 1, oC ), osignal );
+      plot( repmat( ( 0 : oN-1 )'/Fs, 1, oC ), signal );
       xlabel( 'Secondes' );
       grid on;
       for( c = 1 : oC )
@@ -113,7 +110,7 @@ if( ~nargout )
       F = ( Fi - 1 ) / nfft;
       T = ( ti - 1 ) * jump;
       subplot( 2, 1, 1 );
-      plot( osignal );
+      plot( signal );
       xlabel( 'Echantillons' );
       grid on;
       for( c = 1 : oC )
@@ -131,6 +128,6 @@ if( ~nargout )
       end
    end
    clear fft_array
-   clear sadjusted
    
 end
+
