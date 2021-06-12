@@ -1,30 +1,58 @@
-function [ss, s_psd] = sumspec(s, sr, freq_Hz)
+function [ss, x] = sumspec(s, sr, freq_Hz, w)
 %
-% function [ss, s_psd] = sumspec(s, sr, freq_Hz)
+% function [ss, x] = sumspec(signal, sample_rate, freq_Hz, win)
+% function [ss, x] = sumspec(audiofile, freq_Hz, win)
 %
-% Returns short-term PSD of s summed for frequencies  freq_Hz.
-%
+% Returns short-term PSD of signal summed over frequencies freq_Hz.
 % Signal given as an array and its sampling rate, or the name of an audio
-% file.
+% file. The 2nd output x is the raw short-term FFT.
 %
-% s_psd is the raw short-term PSD.
-%
+
 if (ischar(s))
-    if (nargin >= 2)
+    % between 1 and 3 arg(s)
+    if (nargin == 3)
+        w = freq_Hz;
         freq_Hz = sr;
-    else
+    end
+    if (nargin == 2)
+        if (ischar(sr))
+            w = sr;
+            freq_Hz = [];
+        else
+            freq_Hz = sr;
+            w = [];
+        end
+    end
+    if (nargin == 1)
         freq_Hz = [];
+        w = [];
     end
     [s, sr] = audioread (s);
 else
-    if (nargin < 3)
+    % between 2 and 4 arg(s)
+    if (nargin == 3)
+        if (ischar(freq_Hz))
+            w = freq_Hz;
+            freq_Hz = [];
+        else
+            w = [];
+        end
+    end
+    if (nargin == 2)
         freq_Hz = [];
+        w = [];
     end
 end
 if (isempty(freq_Hz))
     freq_Hz = bark2hz((0:1/3:24.5)');
-    %freq_Hz = tune([0:.5:8*6]', 440/16, 6);
     %freq_Hz = tune([0:3:8*6]', 55, 6);
+end
+if (isempty(w))
+    w = 'flattopwin';
+    w = 'blackmanharris';
+    w = 'hamming';
+    w = 'blackman';
+    w = 'hann';
 end
 
 % work only on mono
@@ -39,7 +67,6 @@ n = max (find(freq_Hz <= 0));
 freq_Hz = freq_Hz(n:end);
 
 % we want sr/nfft < freq_Hz(1)
-%sz = pow2(nextpow2(sr/freq_Hz(1)));
 sz = pow2(nextpow2(sr/min(diff(freq_Hz))));
 nfft = sz;
 % 50% overlap
@@ -48,11 +75,10 @@ overlap = nfft/2;
 f = sr*(0:nfft/2-1)'/nfft;
 
 % short-time PSD
-w = 'flattopwin';
-w = 'blackmanharris';
-s_psd = spectrogram(s, sz, nfft, overlap, w) / sz;
+x = spectrogram(s, sz, nfft, overlap, w);
+s_psd = x / sz;
 s_psd = (s_psd .* conj(s_psd));
-s_psd = 2*s_psd(1:sz/2, :);
+s_psd = s_psd(1:sz/2, :) + s_psd(end:-1:sz/2+1, :);
 
 % sum over given freq
 [r, c] = size(s_psd);
@@ -63,17 +89,42 @@ for n = 1:length(k)-1
 end
 
 if (nargout == 0)
+
+    % graphical parameters
+    % 'viridis' 'cubehelix' 'copper' 'hot' 'gray'
+    % IMHO jet is the best for details in low-dynamic area but it can be
+    % unintuitive in the relative scale where a hot or copper colormap
+    % is more straightforward
+    cmap = 'jet';
+    %cmap = 'hot';
+    dB_min = -40;
+    disp_raw_psd = 1;
+
     dt = (nfft - overlap)/sr;
-    colormap( 'hot' );
-    %imagesc([0,(c-1)*dt], [0, (r-1)*f(2)], 10*log10(s_psd));
-    %imagesc([0,(c-1)*dt], f, 10*log10(s_psd));
-    % normalize each PSD
-    %m = max (ss, [], 1);
-    %for n = 1:c;
-    %    ss(:,n) = ss(:,n)/m(n);
-    %end
-    imagesc([0,(c-1)*dt], freq_Hz, 10*log10(ss));
-    soundsc(s, sr);
+    figure
+    colormap (cmap);
+
+    if (disp_raw_psd > 0)
+        s_dB = 10*log10(s_psd);
+        max_dB = max(max(s_dB));
+        s_dB = s_dB - max_dB;
+        s_dB(find (s_dB) < dB_min) = dB_min;
+        imagesc([0,(c-1)*dt], [0, f(end)], s_dB);
+        xlabel ('time (s)');
+        ylabel ('Hz');
+    else
+        % rescale the summed-PSD
+        ss_dB = 10*log10(ss);
+        max_dB = max(max(ss_dB));
+        ss_dB = ss_dB - max_dB;
+        ss_dB(find (ss_dB) < dB_min) = dB_min;
+        % Y-scale is not revelant excepting its min and max
+        imagesc([0,(c-1)*dt], [], ss_dB);
+        xlabel ('time (s)');
+    end
+
+    %colorbar('East')
+    title(w);
     clear ss;
-    clear s_psd;
+    clear x;
 end

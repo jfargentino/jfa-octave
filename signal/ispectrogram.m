@@ -42,4 +42,5 @@ end
 %   
 %end
 
-signal = [ 0 ;chunksize * signal / 2 ];
+%signal = [ 0 ;chunksize * signal / 2 ];
+signal = chunksize * signal;
