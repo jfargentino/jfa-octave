@@ -97,29 +97,20 @@ if (nargout == 0)
     % is more straightforward
     cmap = 'jet';
     %cmap = 'hot';
-    dB_min = -40;
-    disp_raw_psd = 1;
+    disp_raw_psd = 0;
 
     dt = (nfft - overlap)/sr;
     figure
     colormap (cmap);
 
     if (disp_raw_psd > 0)
-        s_dB = 10*log10(s_psd);
-        max_dB = max(max(s_dB));
-        s_dB = s_dB - max_dB;
-        s_dB(find (s_dB) < dB_min) = dB_min;
-        imagesc([0,(c-1)*dt], [0, f(end)], s_dB);
+        image([0,(c-1)*dt], [0, f(end)], specimg(s_psd));
         xlabel ('time (s)');
         ylabel ('Hz');
     else
         % rescale the summed-PSD
-        ss_dB = 10*log10(ss);
-        max_dB = max(max(ss_dB));
-        ss_dB = ss_dB - max_dB;
-        ss_dB(find (ss_dB) < dB_min) = dB_min;
-        % Y-scale is not revelant excepting its min and max
-        imagesc([0,(c-1)*dt], [], ss_dB);
+        % TODO Y-scale (freq) is not revelant excepting its min and max
+        image([0,(c-1)*dt], [], specimg(ss, 60));
         xlabel ('time (s)');
     end
 
