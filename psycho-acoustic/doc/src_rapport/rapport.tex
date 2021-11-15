@@ -1,0 +1,50 @@
+\documentclass[12pt,a4paper,french]{report}
+\usepackage{babel}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\renewcommand \( { \left( }
+\renewcommand \) { \right) }
+\renewcommand \[ { \left[ }
+\renewcommand \] { \right] }
+\newcommand   \matlab {{\scriptsize {\it MATLAB$^{\copyright}$}} }
+\newcommand   \matlabv {{\scriptsize {\it MATLAB$^{\copyright}$}}, }
+\newcommand   \dsp {densit{\'e} spectrale de puissance }
+
+\title{Etude de signaux sonores stationnaires en vue de leur reproduction}
+\author{Jean-Fran\c{c}ois Argentino}
+
+\begin{document}
+\sloppy
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\listoffigures
+\newpage
+
+\chapter*{Introduction et probl{\'e}matique}
+\addcontentsline{toc}{chapter}{Introduction}
+\input{introduction.tex}
+
+\chapter{Pr{\'e}sentation de l'entreprise}
+\label{genesis}
+\input{genesis.tex}
+
+\chapter{Notions de psychoacoustique}
+\label{theorie}
+\input{theorie.tex}
+
+\chapter{Manuel d'utilisation de la bo{\^\i}te {\`a} outils}
+\label{manuel}
+\input{manuel.tex}
+
+\chapter*{Conclusion sur le stage}
+\addcontentsline{toc}{chapter}{Conclusion}
+\input{conclusion.tex}
+
+\end{document}

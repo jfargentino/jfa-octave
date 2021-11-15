@@ -1,26 +1,37 @@
-function y = fft_resample (x, k)
+function y = fft_pitcher (x, k)
 %
-% function y = fft_resample (x, k)
+% function y = fft_pitcher (x, k)
 %
-% Change sampling frequency of x by k = sr_y / sr_x.
-% If k > 1.0 (upsampling), zero-pad the FFT.
-% Ik k < 1.0 (downsampling), remove FFT high pads.
+% Change pitch frequency of x by k.
 %
-% TODO check the difference with fft_resample2. This version looks better
-% when length is important.
+% TODO how to use resample on the signal to avoid 0 or removing data ?
 %
 [R, C] = size(x);
 real_input = isreal(x);
-X = fftshift(fft(x));
+
+%y = fft_resample(x, k);
+%X = fftshift (fft(y));
+
 if (k > 1.0)
+    %n = round( ((k - 1) * R) / 2 );
+    %X = X(n+1:end-n, :);
+    % OK FOR LENGTH AND PITCH BUT PADDING IN THE OUTPUT %%%%%%%%%%%%%%%%%%%%%%%
+    % Zero-pad x thus its new length will interpolize its spectrum
     n = round( ((k - 1) * R) / 2 );
-    z = zeros( n, C );
-    y = [z; X; z];
+    y = [zeros(n, C); x; zeros(n, C)];
+    X = fftshift (fft(y));
+    % remove high pads to retrieve the same length as original
+    X = X(n+1:end-n, :);
 else
+    %n = round( ((1 - k) * R) / 2 );
+    %X = [zeros(n, C); X; zeros(n, C)];
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     n = round( ((1 - k) * R) / 2 );
-    y = X(n+1:end-n, :);
+    y = x(n+1:end-n, :);
+    X = fftshift (fft(y));
+    X = [zeros(n, C); X; zeros(n, C)];
 end
-y = k * ifft(fftshift(y));
+y = ifft(fftshift(X)) / k;
 if (real_input)
     y = real(y);
 end

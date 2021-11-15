@@ -1,0 +1,81 @@
+\documentclass[12pt,a4paper,french]{article}
+\setlength{\textwidth}{150mm} \setlength{\oddsidemargin}{+5mm}
+\setlength{\evensidemargin}{+0mm} \setlength{\textheight}{230mm}
+\addtolength{\topmargin}{-25mm}
+
+
+\usepackage{babel}
+
+
+\title{Etude de signaux sonores stationnaires en vue de leur reproduction}
+\author{Jean-Fran\c{c}ois Argentino}
+
+
+\begin{document}
+\sloppy
+
+
+\begin{center}
+\textbf{\large{Etude de signaux sonores stationnaires en vue de
+leur reproduction}}\\
+R{\'e}sum{\'e}\\
+\medskip
+\emph{Jean-Fran\c{c}ois Argentino}\\
+\end{center}
+\bigskip
+
+J'ai eu la chance d'effectuer mon stage de derni{\`e}re ann{\'e}e d'{\'e}cole
+d'ing{\'e}nieur au sein de la soci{\'e}t{\'e} GENESIS qui est sp{\'e}cialis{\'e}e dans
+l'analyse et le traitement de signaux sonores. En particulier,
+GENESIS d{\'e}veloppe des simulateurs d'environnement sonore en temps
+r{\'e}el (par exemple l'environnement sonore du simulateur de vol
+SuperPuma pour EUROCOPTER).\\
+
+Ce type de projet se d{\'e}roule en deux phases. Dans un premier
+temps, les ing{\'e}nieurs analysent les signaux sonores r{\'e}els pour:
+\begin{itemize}
+    \item d{\'e}terminer quelles composantes sont n{\'e}cessaires {\`a} leur
+    reproduction,
+    \item trouver les lois d'{\'e}volution les r{\'e}gissant lors des
+    variations des param{\`e}tres internes du syst{\`e}me {\`a} simuler.
+\end{itemize}
+
+Une fois ce travail d'analyse effectu{\'e}, il reste {\`a} r{\'e}aliser le
+g{\'e}n{\'e}rateur de sons. Ce dernier est un syst{\`e}me prenant en entr{\'e}e
+les param{\`e}tres internes du syst{\`e}me {\`a} simuler, la sortie {\'e}tant le
+signal sonore correspondant {\`a} l'{\'e}tat du syst{\`e}me.\\
+
+Les ing{\'e}nieurs de la soci{\'e}t{\'e} GENESIS ont d{\'e}cid{\'e}s de mod{\'e}liser les
+signaux sonores avec un nombre fini de sinuso{\"\i}des et de bandes de
+bruit. C'est un mod{\`e}le perceptif, c'est {\`a} dire que ces param{\`e}tres
+seront d{\'e}termin{\'e}s selon des principes psychoacoustiques
+\footnote{Branche de l'acoustique qui {\'e}tudie la perception des
+sons par l'homme.}. Ainsi les sons d'origine, {\`a} spectres en
+g{\'e}n{\'e}ral tr{\`e}s complexes, seront simplifi{\'e}s pour ne garder que les
+composantes pertinentes {\`a} l'oreille. Le nombre de composantes {\`a}
+garder d{\'e}pendant essentiellement de la qualit{\'e} exig{\'e}e, de la
+puissance de calcul du g{\'e}n{\'e}rateur de son mais {\'e}galement de
+l'efficacit{\'e} de la m{\'e}thode de
+s{\'e}lection.\\
+
+Au cours de ce stage, j'ai d{\'e}velopp{\'e} un ensemble de fonctions pour
+le logiciel MATLAB. Elles serviront au moment de l'analyse des
+signaux stationnaires (ou lentement variables) {\`a} reproduire.
+
+Ainsi, la s{\'e}lection des param{\`e}tres pertinents a {\'e}t{\'e} enti{\`e}rement
+automatis{\'e}e. L'autre partie de l'analyse, la recherche des lois
+d'{\'e}volution, sera grandement facilit{\'e}e par des outils de recherche
+de suites harmoniques.
+
+De plus, cette bo{\^\i}te {\`a} outils est enti{\`e}rement configurable par
+l'utilisateur averti, qui pourra ainsi l'adapter pour son besoin
+pr{\'e}cis.\\
+
+En conclusion, le mod{\`e}le utilis{\'e} et la s{\'e}lection des param{\`e}tres
+pertinents gr{\^a}ce {\`a} des crit{\`e}res psychoacoustiques sont efficaces
+puisque pour la plupart des signaux stationnaires, une vingtaine
+de sinus et une vingtaine de bandes de bruit suffisent {\`a} une
+reproduction du son fid{\`e}le. En revanche, les sons non
+stationnaires doivent {\^e}tre trait{\'e}s d'une tout autre mani{\`e}re car
+les outils d{\'e}velopp{\'e}s ne sont pas faits pour.
+\end{document}

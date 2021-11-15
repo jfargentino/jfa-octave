@@ -1,4 +1,4 @@
-function y = dirty_down_sampling (x, w)
+function y = crude_down_sampling (x, w)
 
 if (nargin < 2)
     w = 2;

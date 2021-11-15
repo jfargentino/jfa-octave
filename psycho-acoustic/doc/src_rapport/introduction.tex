@@ -1,0 +1,94 @@
+Pour cl{\^o}turer mes {\'e}tudes d'ing{\'e}nieur, j'ai effectu{\'e} un stage d'une
+dur{\'e}e de 5 mois au sein de la soci{\'e}t{\'e} GENESIS. Pendant cette
+p{\'e}riode, un projet m'a {\'e}t{\'e} confi{\'e}. Ce rapport pr{\'e}sente donc le
+travail que j'ai fait, ainsi que les fondements th{\'e}oriques sur
+lesquels il se base.
+
+L'une des sp{\'e}cialit{\'e}s cette soci{\'e}t{\'e} est la simulation
+d'environnements sonores. Pour r{\'e}pondre {\`a} ce genre de probl{\`e}me,
+deux approches sont envisageables:\\
+
+\begin{itemize}
+    \item L'enregistrement des signaux sonores g{\'e}n{\'e}r{\'e}s par le syst{\`e}me
+    pour l'ensemble des {\'e}tats que l'on souhaite simuler. Puis la
+    relecture des {\'e}chantillons au moment de la simulation.
+
+    Cette technique ne n{\'e}cessite pas ou peu d'analyse, mais
+    elle poss{\`e}de deux inconv{\'e}nients majeurs. Le premier est que
+    la quantit{\'e} de m{\'e}moire n{\'e}cessaire pour stocker les enregistrements est
+    trop importante au vue de la qualit{\'e} des sons restitu{\'e}s. De
+    plus, un simulateur d'environnement sonore bas{\'e} sur ce
+    principe ne pourra {\'e}voluer qu'au prix du r{\'e}-enregistrement des
+    signaux {\`a} lire.\\
+
+    \item La synth{\`e}se en temps r{\'e}el des signaux sonores par
+    algorithme pour laquelle une analyse du syst{\`e}me {\`a} simuler est
+    n{\'e}cessaire. Dans ce cas, ce n'est plus la quantit{\'e} de m{\'e}moire
+    qui est critique mais la puissance de calcul du g{\'e}n{\'e}rateur.
+    En effet, l'architecture de ce dernier est conditionn{\'e}e par la
+    mod{\'e}lisation choisie.\\
+\end{itemize}
+
+Pour cette derni{\`e}re m{\'e}thode, il existe deux types d'algorithmes:\\
+
+\begin{itemize}
+    \item Les algorithmes de mod{\'e}lisation physique o{\`u} on tachera de
+    d{\'e}crire le syst{\`e}me {\`a} simuler par des {\'e}quations m{\'e}caniques
+    rendant compte du son qu'il produit. Il faudra alors que le
+    simulateur r{\'e}solve en temps r{\'e}el ces {\'e}quations pour pouvoir
+    synth{\'e}tiser le son demand{\'e}. Ce genre de syst{\`e}me d'{\'e}quations
+    devient tr{\`e}s vite trop complexe pour des syst{\`e}mes {\`a} simuler un
+    peu {\'e}volu{\'e}s, et la qualit{\'e} du rendu sonore n'est pas toujours {\`a}
+    la hauteur.\\
+
+    \item A l'inverse, les algorithmes de mod{\'e}lisation du signal
+    sonore ne d{\'e}crivent pas la source du son, mais bien le son
+    lui-m{\^e}me. Il faut donc trouver un mod{\`e}le math{\'e}matique d{\'e}crivant
+    plus ou moins fid{\`e}lement le signal sonore, selon la qualit{\'e}
+    exig{\'e}e.\\
+\end{itemize}
+
+Il est possible d'adopter en plus une approche dite perceptive. En
+effet, les sons {\`a} simuler sont de natures tr{\`e}s diverses, il est
+donc impossible d'en sortir un mod{\`e}le math{\'e}matique g{\'e}n{\'e}rique. En
+revanche, le r{\'e}cepteur est toujours identique puisqu'il s'agit de
+l'oreille humaine. La psychoacoustique (voir chapitre 2 page
+\pageref{theorie}) est la science qui analyse la perception des
+sons par l'Homme, elle nous permet alors de s{\'e}lectionner dans un
+signal ce qui sera vraiment per\c{c}u par l'auditeur. Des m{\'e}thodes de
+compression audio avec perte (la norme MP3 par exemple) sont
+bas{\'e}es sur de tels principes.
+
+Le mod{\`e}le choisi par les ing{\'e}nieurs de la soci{\'e}t{\'e} GENESIS est une
+d{\'e}composition du signal sonore en un nombre fini de sinuso{\"\i}des et
+de bandes de bruit {\`a} spectre contigu{\"e}. C'est un mod{\`e}le perceptif,
+c'est {\`a} dire que ces param{\`e}tres seront d{\'e}termin{\'e}s selon des
+principes psychoacoustiques. Ainsi les sons d'origine, {\`a} spectres
+en g{\'e}n{\'e}ral tr{\`e}s complexes, seront simplifi{\'e}s pour ne garder que
+les composantes pertinentes {\`a} l'oreille. Le nombre de composantes
+{\`a} garder d{\'e}pendant essentiellement de la qualit{\'e} exig{\'e}e, de la
+puissance de calcul du g{\'e}n{\'e}rateur de son mais {\'e}galement de
+l'efficacit{\'e} de la m{\'e}thode de s{\'e}lection.
+
+Jusqu'{\`a} pr{\'e}sent, les ing{\'e}nieurs de GENESIS s{\'e}lectionnaient "{\`a}
+l'oreille" les param{\`e}tres {\`a} utiliser lors de la synth{\`e}se, et cela
+au prix d'un temps pr{\'e}cieux. Cependant, un traitement automatique
+des composantes pertinentes d'un son est envisageable en
+programmant certains des concepts de la psychoacoustique. J'ai
+donc d{\'e}velopp{\'e} au cours de mon stage un ensemble de fonctions pour
+le logiciel \matlabv permettant d'aider {\`a} l'analyse de sons
+stationnaires, ainsi qu'{\`a} la s{\'e}lection de leurs param{\`e}tres
+pertinents selon le mod{\`e}le retenu (sinus + bruit). L'utilisation
+de cette bo{\^\i}te {\`a} outils se veut la plus souple possible, en effet
+l'utilisateur a acc{\`e}s {\`a} l'ensemble des param{\`e}tres internes qu'il
+pourra alors adapter {\`a} ses besoins.
+
+Apr{\`e}s une pr{\'e}sentation de la soci{\'e}t{\'e} GENESIS (page
+\pageref{genesis}), je d{\'e}velopperai succinctement les concepts de
+psychoacoustique sur lesquels s'appuient les fonctions {\'e}crites
+(page \pageref{theorie}). Enfin, le dernier chapitre expliquera en
+d{\'e}tails le fonctionnement de chacune d'elles (page
+\pageref{manuel}). De plus, un CD-ROM est fourni. Il contient la
+bo{\^\i}te {\`a} outils, un certain nombre de sons pour pouvoir la tester,
+le pr{\'e}sent rapport ainsi que ses sources et le support de la
+pr{\'e}sentation orale.
