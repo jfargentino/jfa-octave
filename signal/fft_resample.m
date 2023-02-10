@@ -27,6 +27,20 @@ end
 
 %!demo
 %!
+%! sr_x = 16000;
+%! sr_y = 48000;
+%! f0 = 6666;
+%! t = [ 0 : 21 ]' / sr_x; 
+%! x = sin( 2*pi*f0*t );
+%! y = fft_resample (x, sr_y / sr_x);
+%! subplot(2, 1, 1);
+%! plot ( x );
+%! subplot(2, 1, 2);
+%! plot ( y );
+%!
+
+%!demo
+%!
 %! sr_x = 44100;
 %! sr_y = 48000;
 %! x = randn (sr_x, 1);
