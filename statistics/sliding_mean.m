@@ -2,7 +2,9 @@ function y = sliding_mean (x, w_sz, stp, zpad)
 %
 % function y = sliding_mean (x, w_sz, stp, zpad)
 %
-% Evaluate the sliding mean of vector x on 'w_sz' elements.
+% Evaluate the sliding mean of vector x over 'w_sz' elements.
+% Returned vector is shorter than input one by 'w_sz': its 1st element is
+% the mean of 'x(1:w_sz)'.
 %
 if (w_sz <= 0)
    y = NaN;
